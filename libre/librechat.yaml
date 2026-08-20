@@ -1,0 +1,46 @@
+version: 1.3.5
+
+cache: true
+
+endpoints:
+  custom:
+    - name: "DeepSeek Anthropic"
+
+      # IMPORTANT:
+      # This tells LibreChat that the endpoint speaks the native
+      # Anthropic Messages API (/v1/messages), rather than OpenAI's API.
+      provider: "anthropic"
+
+      # Read from Railway environment variables.
+      # Never put the actual API key here.
+      apiKey: "${DEEPSEEK_API_KEY}"
+
+      # DeepSeek Anthropic-compatible gateway.
+      # Also stored as a Railway variable so it can be changed
+      # without modifying this YAML.
+      baseURL: "${DEEPSEEK_ANTHROPIC_BASE_URL}"
+
+      # Standard Anthropic header.
+      # DeepSeek currently accepts/ignores anthropic-version,
+      # but keeping it here improves Anthropic compatibility.
+      headers:
+        anthropic-version: "2023-06-01"
+
+      models:
+        default:
+          - "deepseek-v4-pro"
+          - "deepseek-v4-flash"
+
+        # Native Anthropic custom endpoints should list models
+        # explicitly rather than trying OpenAI-style model discovery.
+        fetch: false
+
+      # Generate conversation titles automatically.
+      titleConvo: true
+
+      # Use Flash for titles because title generation doesn't
+      # generally need the more expensive model.
+      titleModel: "deepseek-v4-flash"
+
+      # What users see in LibreChat's provider selector.
+      modelDisplayLabel: "DeepSeek"
